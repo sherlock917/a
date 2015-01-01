@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>algorithm</title>
+  <style>
+  h3 {
+    cursor: pointer;
+  }
+  pre {
+    padding: 10px;
+    border: 1px solid #333;
+  }
+  </style>
+</head>
+<body style="background: white; font-family: Helvetica">
+
+  <div>
+    <h3>8594 有重复元素的排列问题</h3>
+    <pre style="display: none;">
+#include <iostream>
+
+using namespace std;
+
+static int counter = 0;
+
+void mSwap (char &a, char &b) {
+    char tmp = a;
+    a = b;
+    b = tmp;
+}
+
+bool mFind (char list[], int start, int end) {
+    for (int i = start; i <= end - 1; i++) {
+        if (list[i] == list[end]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void mPerm (char list[], int k, int m) {
+    if (k == m) {
+        for (int i = 0; i <= m; i++) {
+            cout << list[i];
+        }
+        cout << endl;
+        counter++;
+    } else {
+        for (int i = k; i <= m; i++) {
+            if (mFind(list, k, i)) {
+                continue;
+            }
+            mSwap(list[k], list[i]);
+            mPerm(list, k + 1, m);
+            mSwap(list[k], list[i]);
+        }
+    }
+}
+
+int main(int argc, const char * argv[]) {
+    
+    int length;
+    char list[20];
+    
+    cin >> length;
+    cin >> list;
+    
+    mPerm(list, 0, length - 1);
+    cout << counter << endl;
+    
+    
+    return 0;
+}
+    </pre>
+  </div>
+
+  <div>
+    <h3>9718 整数因子分解</h3>
+    <pre style="display: none;">
+#include <iostream>
+
+using namespace std;
+
+int counter = 1;
+
+void divider (int num) {
+    for(int i = num - 1; i > 1; i--) {
+        if (num % i == 0) {
+            counter++;
+            divider(num / i);
+        }
+    }
+}
+
+int main(int argc, const char * argv[]) {
+    
+    int num;
+    cin >> num;
+    divider(num);
+    cout << counter << endl;
+    return 0;
+    
+}
+    </pre>
+  </div>
+
+  <div>
+    <h3>11088 整数划分的扩展问题</h3>
+    <pre style="display: none;">
+#include <iostream>
+
+using namespace std;
+
+int Q(int n, int m);
+int EVEN(int n, int m);
+int ODD(int n, int m);
+
+// 最大加数不超过m的划分数；不超过m个正整数之和的划分数
+int Q(int n, int m){
+    if((n < 1) || (m < 1)){
+        return 0;
+    }
+    
+    if((n == 1) || (m == 1)){
+        return 1;
+    }
+    
+    if(n < m){
+        return Q(n, n);
+    }
+    
+    if(n == m){
+        return Q(n, m-1) + 1;
+    }
+    
+    return Q(n, m-1) + Q(n-m, m);
+}
+
+// 正偶整数之和的划分数
+int EVEN(int n, int m){
+    if(m > n || m <= 0){
+        return 0;
+    }
+    
+    if(((n == 1) && (m == 1)) || ((n == 2) && (m == 2))){
+        return 0;
+    }
+    
+    if((n == 2) && (m == 1)){
+        return 1;
+    }
+    
+    return ODD(n-m, m);
+}
+
+// 正奇整数之和的划分数
+int ODD(int n, int m){
+    if(m > n || m <= 0){
+        return 0;
+    }
+    
+    if((n == 2) && (m == 1)){
+        return 0;
+    }
+    
+    if(((n == 1) && (m == 1)) || ((n == 2) && (m == 2))){
+        return 1;
+    }
+    
+    return ODD(n-1, m-1) + EVEN(n-m, m);
+}
+
+int main()
+{
+    int n,m;
+    cin >> n;
+    cin >> m;
+    
+    int res1 = Q(n,m);//（1）（2）问答案相同
+    int res2 = 0;//（3）（4）问答案相同
+    for(int i=1;i<=n;i++){
+        res2 += ODD(n,i);
+    }
+    
+    cout << res1 << " " << res1 << " " << res2 << " " << res2;
+    
+    cout << endl;
+    return 0;
+}
+    </pre>
+  </div>
+
+  <div>
+    <h3>17082 两个有序数序列中找第k小</h3>
+    <pre style="display: none;">
+#include <iostream>
+
+using namespace std;
+
+int m,n,k;
+
+int find (int X[], int m, int Y[], int n, int k) {
+    int temp = 0, xBeg = 0, xEnd = 0, yBeg = 0, yEnd = 0, xMid = 0, yMid = 0;
+    xBeg = yBeg = 0;
+    xEnd  = m - 1;
+    yEnd = n - 1;
+    
+    while (xBeg <= xEnd && yBeg <= yEnd) {
+        xMid = (xBeg + xEnd) /2;
+        yMid = (yBeg + yEnd) /2;
+        
+        temp = (xMid - xBeg + 1) + (yMid - yBeg + 1);
+        
+        if(X[xMid] > Y[yMid]) {
+            if(temp > k) {
+                xEnd = xMid - 1;
+            }
+            else {
+                k = k - (yMid - yBeg + 1);
+                yBeg = yMid + 1;
+            }
+        } else {
+            if(temp > k) {
+                yEnd = yMid - 1;
+            } else {
+                k = k - (xMid - xBeg + 1);
+                xBeg = xMid + 1;
+            }
+        }
+    }
+    
+    if(xBeg > xEnd) {
+        return Y[yBeg + k - 1];
+    }
+    else {
+        return X[xBeg + k - 1];
+    }
+}
+
+int main(int argc, const char * argv[]) {
+    
+    cin >> m;
+    cin >> n;
+    cin >> k;
+    
+    int X[m];
+    int Y[n];
+    
+    for (int i = 0; i < m; i++) {
+        cin >> X[i];
+    }
+    
+    for (int i = 0; i < n; i++) {
+        cin >> Y[i];
+    }
+    
+    cout << find(X, m, Y, n, k) << endl;
+}
+    </pre>
+  </div>
+
+  <script>
+  (function () {
+    var titles = document.getElementsByTagName('h3');
+    var codes = document.getElementsByTagName('pre');
+
+    for (var i = 0; i < titles.length; i++) {
+      (function () {
+        var j = i;
+        titles[j].onclick = function (e) {
+          if (codes[j].style.display == 'none') {
+            codes[j].style.display = 'block';
+          } else {
+            codes[j].style.display = 'none';
+          }
+        }
+      })();
+    }
+  })();
+  </script>
+
+</body>
+</html>
