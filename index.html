@@ -477,7 +477,237 @@ int main() {
   <div>
     <h3>11077 最长公共子字符串</h3>
     <pre style="display: none;">
+#include <iostream>
+#include <string.h>
 
+using namespace std;
+
+int c[10000][10000];
+char str1[10000];
+char str2[10000];
+
+void find (long m,long n) {
+    if (m < 0 || n < 0 ) {
+        return;
+    }
+
+    for (int i = 0; i < m; i++) {
+        for(int j = 0; j < n; j++) {
+            c[i][j] = 0;
+        }
+    }
+
+    int besti = 0, bestj = 0;
+    int count = 0;
+
+    for (int i = 0; i < m; i++) {
+        for (int j=0; j < n; j++) {
+            if (str1[i] == str2[j]) {
+                if( i == 0 || j == 0) {
+                    c[i][j]=1;
+                } else {
+                    c[i][j]=c[i-1][j-1] + 1 ;
+                }
+            } else {
+                c[i][j]=0;
+            }
+        }
+    }
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (c[i][j] > count) {
+                count = c[i][j];
+                besti = i;
+                bestj = j;
+            }
+        }
+    }
+
+    cout << count << endl;
+
+    if (count == 0) {
+        cout << endl;
+    } else {
+        for(int i= besti - count + 1; i <= besti; i++) {
+            cout << str1[i];
+        }
+        cout << endl;
+    }
+}
+
+int main () {
+
+    long m = 0, n = 0;
+    cin >> str1;
+    cin >> str2;
+    m = strlen(str1);
+    n = strlen(str2);
+    find(m,n);
+
+}
+    </pre>
+  </div>
+
+  <div>
+    <h3>11078 不能移动的石子合并</h3>
+    <pre style="display: none;">
+#include<iostream>
+
+using namespace std;
+
+int n,minnum,maxnum;
+int m[100][100],p[100],sum[100];
+int maxs[100][100],mins[100][100];
+
+int min(int i,int j)
+{
+    if(i<=j)
+        return i;
+    else
+        return j;
+}
+
+int max(int i,int j)
+{
+    if(i>=j)
+        return i;
+    else
+        return j;
+}
+
+int sums(int i,int j)
+{
+    if(i+j>=n)
+        return sums(i,n-i-1)+sums(0,(i+j)%n);
+    else
+        return sum[i+j]-(i>0?sum[i-1]:0);
+}
+
+void minLine()
+{
+    int i,j,k,r,t,stonesum;
+    for(i=1;i<=n;i++)
+        m[i][i]=0;
+    for( r=2;r<=n;r++)
+    {
+
+        for(i=1;i<=n-r+1;i++)
+        {
+            j=i+r-1;
+
+            m[i][j]=100000;
+
+            if(i>1)
+                stonesum=sum[j]-sum[i-1];
+            else
+                stonesum=sum[j];
+
+            for(k=i;k< j;k++)
+            {
+                t=m[i][k]+m[k+1][j]+stonesum;
+
+                if(t< m[i][j])
+                {
+                    m[i][j]=t;
+                }
+            }
+        }
+    }
+}
+
+void maxLine()
+{
+    int i,j,k,r,t,stonesum;
+    for(i=1;i<=n;i++)
+        m[i][i]=0;
+    for(r=2;r<=n;r++)
+    {
+        for(i=1;i<=n-r+1;i++)
+        {
+            j=i+r-1;
+
+            m[i][j]=0;
+
+            if(i>1)
+                stonesum=sum[j]-sum[i-1];
+            else
+                stonesum=sum[j];
+
+            for( k=i;k< j;k++)
+            {
+                t=m[i][k]+m[k+1][j]+stonesum;
+
+                if(t>m[i][j])
+                {
+                    m[i][j]=t;
+                }
+            }
+        }
+    }
+}
+
+void countLoop()
+{
+    int i,j,k;
+    for(i=0;i< n;i++)
+        mins[i][0]=maxs[i][0]=0;
+
+    for(j=1;j< n;j++)
+    {
+        for(i=0;i< n;i++)
+        {
+            mins[i][j]=100000;
+            maxs[i][j]=0;
+            for(k=0;k< j;k++)
+            {
+                mins[i][j]=min(mins[i][k]+mins[(i+k+1)%n][j-k-1]+sums(i,j),mins[i][j]);
+
+                maxs[i][j]=max(maxs[i][k]+maxs[(i+k+1)%n][j-k-1]+sums(i,j),maxs[i][j]);
+            }
+        }
+
+    }
+
+    minnum=mins[0][n-1];
+    maxnum=maxs[0][n-1];
+
+    for(i=0;i< n;i++)
+    {
+        minnum=min(minnum,mins[i][n-1]);
+        maxnum=max(maxnum,maxs[i][n-1]);
+    }
+}
+
+int main()
+{
+    int i;
+    cin>>n;
+    for(i=1;i<=n;i++)
+        cin>>p[i];
+
+    sum[1]=p[1];
+    for(i=2;i<=n;i++)
+        sum[i]=sum[i-1]+p[i];
+
+    minLine();
+    cout<< m[1][n]<< " ";
+    maxLine();
+    cout<< m[1][n]<< endl;
+
+
+    for(i=0;i< n;i++)
+        p[i]=p[i+1];
+
+    sum[0]=p[0];
+    for(i=1;i< n;i++)
+        sum[i]=sum[i-1]+p[i];
+
+    countLoop();
+    cout<< minnum<<" "<< maxnum<< endl;
+
+    return 0;
+}
     </pre>
   </div>
 
