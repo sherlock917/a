@@ -405,7 +405,72 @@ int main()
   <div>
     <h3>10303 数字三角</h3>
     <pre style="display: none;">
+#include <iostream>
+#include <string>
 
+using namespace std;
+
+// 将int类型转为string的函数
+string int2str(int n) {
+    char t[24];
+    char tran_t[24];
+    int i = 0;
+    while (n) {
+        t[i++] = (n % 10) + '0';
+        n /= 10;
+    }
+    t[i] = 0;
+    //转置，提交系统不支持char转置的库函数
+    int j = 0;
+    while(i) {
+        tran_t[j++] = t[--i];
+    }
+    tran_t[j] = 0;
+    return string(tran_t);
+}
+
+// 求max的函数
+int max(int a, int b) {
+    return a > b ? a : b;
+}
+
+// 求最大路径的函数
+void maxPath(int num[101][101], int n, int m[101][101], string path[101][101]) {
+    for(int i = n; i >= 1; i --) {
+        for(int j = 1; j <= i; j ++) {
+            if(i == n) {
+                m[i][j] = num[i][j];
+                path[i][j] = int2str(num[i][j]);
+            } else {
+                int maxNum = max(m[i + 1][j], m[i + 1][j + 1]);
+                m[i][j] = maxNum + num[i][j];
+                string tmp = maxNum == m[i + 1][j + 1] ? path[i + 1][j + 1] : path[i + 1][j];
+                path[i][j] = int2str(num[i][j]) + " " + tmp;
+            }
+        }
+    }
+}
+
+int main() {
+    int n = 0; // 三角形的行数
+    int num[101][101]; // 存放三角形中数的二维数组
+    int m[101][101]; // 记录最优值的二维数组
+    string path[101][101]; // 记录路径的数组
+    std::cin >> n;
+    if(1 <= n && n <= 100) {
+        // 初始化数塔
+        for(int i = 1; i <= n; i ++) {
+            for(int j = 1; j <= i; j ++) {
+                std::cin >> num[i][j];
+                path[i][j] = "";
+            }
+        }
+        maxPath(num,n,m,path);
+        std::cout << m[1][1] << endl;
+        std::cout << path[1][1];
+    }
+    return 0;
+}
     </pre>
   </div>
 
