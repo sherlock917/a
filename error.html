@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Error</title>
+</head>
+<body>
+  <script>
+  var flag = true;
+  setInterval(function () {
+    if (flag) {
+      document.body.style.background = '#f00';
+      flag = false;
+    } else {
+      document.body.style.background = '#fff';
+      flag = true;
+    }
+  }, 100);
+  </script>
+</body>
+</html>
