@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>algorithm</title>
+  <title></title>
   <style>
   h3 {
     cursor: pointer;
@@ -24,7 +24,7 @@
   <div>
     <h3>8594 有重复元素的排列问题</h3>
     <pre style="display: none;">
-#include <iostream>
+#include &lt;iostream&gt;
 
 using namespace std;
 
@@ -84,7 +84,7 @@ int main(int argc, const char * argv[]) {
   <div>
     <h3>9718 整数因子分解</h3>
     <pre style="display: none;">
-#include <iostream>
+#include &lt;iostream&gt;
 
 using namespace std;
 
@@ -114,7 +114,7 @@ int main(int argc, const char * argv[]) {
   <div>
     <h3>11088 整数划分的扩展问题</h3>
     <pre style="display: none;">
-#include <iostream>
+#include &lt;iostream&gt;
 
 using namespace std;
 
@@ -200,7 +200,7 @@ int main()
   <div>
     <h3>17082 两个有序数序列中找第k小</h3>
     <pre style="display: none;">
-#include <iostream>
+#include &lt;iostream&gt;
 
 using namespace std;
 
@@ -266,10 +266,12 @@ int main(int argc, const char * argv[]) {
     </pre>
   </div>
 
+  <br>
+
   <div>
     <h3>8596 最长上升子序列</h3>
     <pre style="display: none;">
-#include<iostream>
+#include&lt;iostream&gt;
 
 using namespace std;
 
@@ -321,7 +323,7 @@ int main()
   <div>
     <h3>8601 最大长方体问题</h3>
     <pre style="display: none;">
-#include<iostream>
+#include&lt;iostream&gt;
 
 using namespace std;
 
@@ -405,7 +407,7 @@ int main()
   <div>
     <h3>10303 数字三角</h3>
     <pre style="display: none;">
-#include <iostream>
+#include &lt;iostream&gt;
 #include <string>
 
 using namespace std;
@@ -477,7 +479,7 @@ int main() {
   <div>
     <h3>11077 最长公共子字符串</h3>
     <pre style="display: none;">
-#include <iostream>
+#include &lt;iostream&gt;
 #include <string.h>
 
 using namespace std;
@@ -552,7 +554,7 @@ int main () {
   <div>
     <h3>11078 不能移动的石子合并</h3>
     <pre style="display: none;">
-#include<iostream>
+#include&lt;iostream&gt;
 
 using namespace std;
 
@@ -707,6 +709,481 @@ int main()
     cout<< minnum<<" "<< maxnum<< endl;
 
     return 0;
+}
+    </pre>
+  </div>
+
+  <br>
+
+  <div>
+    <h3>8602 区间相交问题</h3>
+    <pre style="display: none;">
+#include&lt;iostream&gt;
+#include<cstdio>
+#include<cstdlib>
+#include<algorithm>
+using namespace std;
+int main()
+{
+   int n;
+   while(cin>>n)
+   {
+       pair< int,int> p[n];
+       for(int i=0; i< n; i++)
+       {
+           cin >> p[i].second;
+           cin >> p[i].first;
+           if(p[i].second > p[i].first)
+           {
+               swap(p[i].second, p[i].first);
+           }
+       }
+       sort(p, p+n);
+       int last, cnt;
+       last = p[0].first;
+       cnt = 1;
+       for(int i=1; i< n; i++)
+       {
+           if(p[i].second >= last)
+           {
+               cnt++;
+               last = p[i].first;
+           }
+       }
+       cout << n - cnt << endl;
+   }
+   return 0;
+}
+    </pre>
+  </div>
+
+  <div>
+    <h3>11079 可以移动的石子合并</h3>
+    <pre style="display: none;">
+#include &lt;iostream&gt;
+#include < stdio.h>
+#include < stdlib.h>
+using namespace std;
+
+void insertionSort(int x[],int N,int newNumber) {
+    int i=0,j=0;
+    while(i< N)
+    {
+        if(x[i]>newNumber)
+        {
+            j=N;
+            while(j>i){x[j]=x[j-1];j--;}
+            x[i]=newNumber;
+            return;
+        }
+        i++;
+    }
+    x[N]=newNumber;
+}
+
+void sort(int x[],int N) {
+    int i,j;
+    for(i=0;i< N-1;i++)
+    {
+        for(j=0;j< N-i-1;j++)
+        {
+            if(x[j]>x[j+1]){x[j]+=x[j+1];x[j+1]=x[j]-x[j+1];x[j]-=x[j+1];}
+        }
+    }
+}
+
+int max(int x[],int N) {
+    int i=0;
+    int sum=0;
+    while(i< N-1)
+    {
+        sum+=x[i]*(i+1);
+        i++;
+    }
+    sum+=x[N-1]*(N-1);
+    return sum;
+}
+
+int min(int x[],int N,int K) {
+    int newNumber=0;
+    int sum=0;
+    int i=0;
+    if(N>0)
+    {
+        if(N>=K)
+        {
+            for(;i< K;i++)
+            {
+                newNumber+=x[i];
+            }
+            sum=newNumber;
+            for(int j=0;j<=N-i;j++){x[j]=x[j+i];}
+            insertionSort(x,N-i,newNumber);//插入前k小数之和
+            if(N-i!=0)N++;
+
+        }
+        else {while(i< N){sum+=x[i];i++;}}
+
+        return sum+min(x,N-i,K);
+    }
+    else return 0;
+}
+
+int SegmentMerge(int r[],int low,int high,int len) {
+    int *r1,*r2;
+    int size1,size2;
+    int i,j,k;
+    size1=len;
+    size2=high-low+1-len;
+    r1=(int *)malloc(size1*sizeof(int));
+    r2=(int *)malloc(size2*sizeof(int));
+    if(r1==NULL||r2==NULL)
+        return 0;
+    for(i=0;i< size1;i++){
+        r1[i]=r[low+i];
+    }
+    for(i=0;i< size2;i++){
+        r2[i]=r[low+size1+i];
+    }
+    i=0;
+    j=0;
+    k=low;
+    while(i< size1&&j< size2){
+        if(r1[i]<=r2[j])
+            r[k++]=r1[i++];
+        else
+            r[k++]=r2[j++];
+    }
+    while(i< size1)
+        r[k++]=r1[i++];
+    while(j< size2)
+        r[k++]=r2[j++];
+    free(r1);
+    free(r2);
+    return 1;
+}
+
+void MergeSort(int r[],int n) {
+    int low,high,len;
+    len=1;
+    while(len< n){
+        low=0;
+        while(len+low< n){
+            high=low+len*2-1;
+            if(high>=n)
+                high=n-1;
+            if(!SegmentMerge(r,low,high,len))return;
+            low=high+1;
+        }
+        len*=2;
+    }
+}
+
+int main() {
+    int N;
+    int K;
+    int x[10001];
+    int i;
+    int max1;
+
+    cin>>N>>K;
+
+    for(i=0;i< N;i++) {
+        std::cin>>x[i];
+    }
+
+    MergeSort(x,N);
+    max1=max(x,N);
+
+    while (N%(K-1)!=1) {
+        insertionSort(x,N,0);
+        N++;
+    }
+
+    cout << min(x,N,K) << ' ' << max1 << endl;
+
+    return 0;
+
+}
+    </pre>
+  </div>
+
+  <br>
+
+  <div>
+    <h3>8600 骑士问题</h3>
+    <pre style="display: none;">
+#include &lt;iostream&gt;
+#include < stdio.h> 　　
+#include < stdlib.h>
+using namespace std;
+
+#define MAXSTEP 64
+#define B 2
+#define N 1
+
+int countStep;
+
+int check (int x,int y,int chessboard[8][8]) {
+    if(x< 0||x>7||y< 0||y>7||chessboard[x][y]==B) {
+        return B;
+    } else {
+        return(chessboard[x][y]);
+    }
+}
+
+void moves (int x,int y,int chessboard[8][8],int count) {
+    int tChessboard[8][8],i,j;
+
+    for(i=0;i< 8;i++) for(j=0;j< 8;j++) {
+        tChessboard[i][j]=chessboard[i][j];
+    }
+
+    switch (check(x,y,tChessboard)) {
+        case B:return;
+        case N:if(count< countStep) countStep=count;return;
+        default:
+            if (count+1< countStep) {
+                tChessboard[x][y]=B;
+                moves(x+2,y+1,tChessboard,count+1);
+                moves(x+2,y-1,tChessboard,count+1);
+                moves(x-2,y+1,tChessboard,count+1);
+                moves(x-2,y-1,tChessboard,count+1);
+                moves(x+1,y+2,tChessboard,count+1);
+                moves(x+1,y-2,tChessboard,count+1);
+                moves(x-1,y+2,tChessboard,count+1);
+                moves(x-1,y-2,tChessboard,count+1);
+            }
+    }
+}
+
+int main() {
+
+    int startX,startY,chessboard[8][8],n,i,j;
+    char s[3];
+
+    typedef struct trst {
+        int result;
+        struct trst *next;
+    } rst;
+
+    rst *head,*p;
+    head=p=(rst*)malloc(sizeof(rst));
+    p->next=NULL;
+    while (1) {
+        cin >> n;
+        if (n==-1) {
+            break;
+        }
+
+        countStep=MAXSTEP;
+        for (i=0;i< 8;i++) {
+            for(j=0;j< 8;j++) {
+                chessboard[i][j]=0;
+            }
+        }
+        if (n) {
+            for(i=0;i< n;i++) {
+                cin >> s;
+                chessboard[(s[0]-'a')][(s[1]-'1')]=B;
+            }
+        }
+        cin >> s;
+        startX=s[0]-'a';startY=s[1]-'1';
+        cin >> s;
+        chessboard[(s[0]-'a')][(s[1]-'1')]=N;
+
+        p->next=(rst*)malloc(sizeof(rst));
+        p=p->next;
+        p->next=NULL;
+
+        moves(startX,startY,chessboard,0);
+        p->result=countStep;
+    }
+
+    p=head->next;
+    i=1;
+    while (p) {
+        if (p->result==MAXSTEP) {
+            cout << "Board " << i << ":not reachable" << endl;
+        } else {
+            cout << "Board " << i << ":" << p->result << " moves" << endl;
+        }
+        p=p->next;
+        i++;
+    }
+
+    return 0;
+}
+    </pre>
+  </div>
+
+  <div>
+    <h3>8603 子集和问题</h3>
+    <pre style="display: none;">
+#include &lt;iostream&gt;
+#include <vector>
+
+using namespace std;
+
+int n, c;
+int number[10000];
+vector< int> solution;
+
+void input() {
+    for(int i=0; i< n; i++) {
+        cin >> number[i];
+    }
+}
+
+bool dfs (int sum, int d) {
+    if(d == n) {
+        if(sum == 0) return true;
+        return false;
+    }
+    solution.push_back(number[d]);
+    if(dfs(sum-number[d], d+1)) return true;
+    solution.pop_back();
+    return dfs(sum, d+1);
+}
+
+void solve () {
+    if (dfs(c, 0)) {
+        cout << solution.at(0);
+        for(int i=1; i < solution.size(); i++) {
+            cout << " " << solution.at(i);
+        }
+        cout << endl;
+    } else {
+        cout << "No Solution" << endl;
+    }
+}
+
+int main () {
+    while (cin >> n >> c) {
+        input();
+        solve();
+    }
+    return 0;
+}
+    </pre>
+  </div>
+
+  <div>
+    <h3>17085 工作分配问题</h3>
+    <pre style="display: none;">
+
+    </pre>
+  </div>
+
+  <div>
+    <h3>11089 多机最佳调度</h3>
+    <pre style="display: none;">
+#include &lt;iostream&gt;
+
+using namespace std;
+
+void Swap (int &a, int &b) {
+    int temp = a ;
+    a = b ;
+    b = temp ;
+}
+
+void Sort (int t[], int n) {
+    int i, j;
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n - 1; j++) {
+            if(t[i] > t[j]) {
+                Swap(t[i], t[j]);
+            }
+        }
+    }
+}
+
+int greedy (int t[], int n, int m) {
+    int b[100] = {0};
+    if (n <= m) {
+        return t[0];
+    }
+    int i = 0, k = 0, min, max ;
+    while (k < n) {
+        min = 0 ;
+        for (i = 1; i < m; i++) {
+            if (b[i] < b[min]) {
+                min = i;
+            }
+        }
+        b[min] += t[k];
+        k++;
+    }
+    max = b[0];
+    for (i = 1; i < m; i++) {
+        if(b[i] > max) {
+            max = b[i];
+        }
+    }
+    return max ;
+}
+
+int ans;
+int b[100];
+
+int dfs (int t[], int k, int l, int n, int m) {
+    int i, j;
+    if (k == n) {
+        int ansn = 0;
+        for (i = 0; i < n; i++) {
+            if (ansn < b[i]) {
+                ansn = b[i];
+            }
+        }
+        if (ansn < ans) {
+            ans=ansn;
+        }
+        return 0;
+    }
+
+    for (j = 0; j <= l; j++) {
+        bool flag = false;
+        for (int jj = 0; jj < j; jj++) {
+            if (b[jj] == b[j]) {
+                flag = true;
+                break;
+            }
+        }
+        if(flag == false){
+            b[j] += t[k];
+            if (b[j] > ans) {
+                b[j] -= t[k];
+                continue;
+            }
+            if(l + 1 < m) {
+                dfs(t, k+1, l+1, n, m);
+            } else {
+                dfs(t, k+1, l, n, m);
+            }
+            b[j] -= t[k];
+        }
+    }
+
+    return ans;
+}
+
+int main () {
+    int n, m, i, t[100], b[100];
+    cin >> n;
+    cin >> m;
+    for (i = 0; i < n; i++) {
+        cin >> t[i];
+    }
+    Sort(t, n);
+    cout << greedy(t, n, m) << endl;
+    ans = 1000000;
+    for(i = 0; i < m; i++) {
+        b[i] = 0;
+    }
+    cout << dfs(t, 0, 0, n, m) << endl;
+    return 0 ;
 }
     </pre>
   </div>
