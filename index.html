@@ -718,41 +718,41 @@ int main()
   <div>
     <h3>8602 区间相交问题</h3>
     <pre style="display: none;">
-#include&lt;iostream&gt;
-#include<cstdio>
-#include<cstdlib>
-#include<algorithm>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstdlib&gt;
+#include &lt;algorithm&gt;
+
 using namespace std;
+
 int main()
 {
-   int n;
-   while(cin>>n)
-   {
-       pair< int,int> p[n];
-       for(int i=0; i< n; i++)
-       {
-           cin >> p[i].second;
-           cin >> p[i].first;
-           if(p[i].second > p[i].first)
-           {
-               swap(p[i].second, p[i].first);
-           }
-       }
-       sort(p, p+n);
-       int last, cnt;
-       last = p[0].first;
-       cnt = 1;
-       for(int i=1; i< n; i++)
-       {
-           if(p[i].second >= last)
-           {
-               cnt++;
-               last = p[i].first;
-           }
-       }
-       cout << n - cnt << endl;
-   }
-   return 0;
+    int n;
+    cin>>n;
+    pair< int,int> p[n];
+    for(int i=0; i< n; i++)
+    {
+        cin >> p[i].second;
+        cin >> p[i].first;
+        if(p[i].second > p[i].first)
+        {
+            swap(p[i].second, p[i].first);
+        }
+    }
+    sort(p, p+n);
+    int last, cnt;
+    last = p[0].first;
+    cnt = 1;
+    for(int i=1; i< n; i++)
+    {
+        if(p[i].second >= last)
+        {
+            cnt++;
+            last = p[i].first;
+        }
+    }
+    cout << n - cnt << endl;
+    return 0;
 }
     </pre>
   </div>
