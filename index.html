@@ -758,149 +758,78 @@ int main() {
     <h3>11079 可以移动的石子合并</h3>
     <pre style="display: none;">
 #include &lt;iostream&gt;
-#include < stdio.h>
-#include < stdlib.h>
+#include &lt;algorithm&gt;
+
 using namespace std;
 
-void insertionSort(int x[],int N,int newNumber) {
-    int i=0,j=0;
-    while(i< N)
-    {
-        if(x[i]>newNumber)
-        {
-            j=N;
-            while(j>i){x[j]=x[j-1];j--;}
-            x[i]=newNumber;
+void insert(int x[], int N, int num) {
+    for (int i = 0; i < N; i++) {
+        if (x[i] > num) {
+            for (int j = N; j > i; j--) {
+                x[j] = x[j - 1];
+            }
+            x[i] = num;
             return;
         }
-        i++;
     }
-    x[N]=newNumber;
+    x[N] = num;
 }
 
-void sort(int x[],int N) {
-    int i,j;
-    for(i=0;i< N-1;i++)
-    {
-        for(j=0;j< N-i-1;j++)
-        {
-            if(x[j]>x[j+1]){x[j]+=x[j+1];x[j+1]=x[j]-x[j+1];x[j]-=x[j+1];}
+int min(int x[], int N, int K) {
+    int sum = 0;
+    int i = 0;
+    if (N > 0) {
+        if (N >= K) {
+            for (i = 0; i < K; i++) {
+                sum += x[i];
+            }
+            for (int j = 0; j <= N - i; j++) {
+                x[j] = x[j + i];
+            }
+            insert(x, N - i, sum);
+            if (N != i) {
+                N++;
+            }
+        } else {
+            for (i = 0; i < N; i++) {
+                sum += x[i];
+            }
         }
+        return sum + min(x, N-i, K);
+    } else {
+        return 0;
     }
 }
 
-int max(int x[],int N) {
-    int i=0;
-    int sum=0;
-    while(i< N-1)
-    {
-        sum+=x[i]*(i+1);
-        i++;
+int max(int x[], int N) {
+    int sum = 0;
+    for (int i = 0; i < N - 1; i++) {
+        sum += x[i] * (i + 1);
     }
-    sum+=x[N-1]*(N-1);
+    sum += x[N - 1] * (N - 1);
     return sum;
 }
 
-int min(int x[],int N,int K) {
-    int newNumber=0;
-    int sum=0;
-    int i=0;
-    if(N>0)
-    {
-        if(N>=K)
-        {
-            for(;i< K;i++)
-            {
-                newNumber+=x[i];
-            }
-            sum=newNumber;
-            for(int j=0;j<=N-i;j++){x[j]=x[j+i];}
-            insertionSort(x,N-i,newNumber);//插入前k小数之和
-            if(N-i!=0)N++;
-
-        }
-        else {while(i< N){sum+=x[i];i++;}}
-
-        return sum+min(x,N-i,K);
-    }
-    else return 0;
-}
-
-int SegmentMerge(int r[],int low,int high,int len) {
-    int *r1,*r2;
-    int size1,size2;
-    int i,j,k;
-    size1=len;
-    size2=high-low+1-len;
-    r1=(int *)malloc(size1*sizeof(int));
-    r2=(int *)malloc(size2*sizeof(int));
-    if(r1==NULL||r2==NULL)
-        return 0;
-    for(i=0;i< size1;i++){
-        r1[i]=r[low+i];
-    }
-    for(i=0;i< size2;i++){
-        r2[i]=r[low+size1+i];
-    }
-    i=0;
-    j=0;
-    k=low;
-    while(i< size1&&j< size2){
-        if(r1[i]<=r2[j])
-            r[k++]=r1[i++];
-        else
-            r[k++]=r2[j++];
-    }
-    while(i< size1)
-        r[k++]=r1[i++];
-    while(j< size2)
-        r[k++]=r2[j++];
-    free(r1);
-    free(r2);
-    return 1;
-}
-
-void MergeSort(int r[],int n) {
-    int low,high,len;
-    len=1;
-    while(len< n){
-        low=0;
-        while(len+low< n){
-            high=low+len*2-1;
-            if(high>=n)
-                high=n-1;
-            if(!SegmentMerge(r,low,high,len))return;
-            low=high+1;
-        }
-        len*=2;
-    }
-}
-
 int main() {
+    int x[10001];
+    
     int N;
     int K;
-    int x[10001];
-    int i;
-    int max1;
-
-    cin>>N>>K;
-
-    for(i=0;i< N;i++) {
-        std::cin>>x[i];
+    
+    cin >> N;
+    cin >> K;
+    
+    for (int i = 0; i < N; i++) {
+        cin >> x[i];
     }
-
-    MergeSort(x,N);
-    max1=max(x,N);
-
-    while (N%(K-1)!=1) {
-        insertionSort(x,N,0);
-        N++;
-    }
-
-    cout << min(x,N,K) << ' ' << max1 << endl;
-
+    
+    sort(x, x + N);
+    
+    int tmp = max(x, N);
+    
+    cout << min(x, N, K) << " " << tmp << endl;
+    
     return 0;
-
 }
     </pre>
   </div>
@@ -1069,7 +998,98 @@ int main () {
   <div>
     <h3>17085 工作分配问题</h3>
     <pre style="display: none;">
+#include &lt;queue&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;string&gt;
 
+#define N 100
+#define M 50
+#define MAX_INT 2E9
+
+using namespace std;
+
+priority_queue<int> heap;
+int n,m;
+int num[N];
+int flag = 0;
+int Max = -MAX_INT;
+int backtrackMax = MAX_INT;
+
+int jobTime[M];
+
+int cmp(const int a,const int b)
+{
+    return a > b;
+}
+
+int greedySelect(int *a,int n,int m)
+{
+    int max = -1;
+    int *b = new int[m];
+    sort(a,a+n,cmp);
+    for(int i=0;i< m;i++)
+        b[i] = a[i];
+    for(int i=m;i< n;i++)
+    {
+        sort(b,b+m);
+        b[0] += a[i];
+    }
+    for(int i=0;i< m;i++)
+    {
+        if(max < b[i])
+            max = b[i];
+    }
+    return max;
+}
+
+void backtrack(int level)
+{
+    // Max是当前最大值（最后的一部机子）
+    if(level == n)
+    {
+        // 最大的拿出来
+        int temp = -MAX_INT;
+        for(int i=0; i< m; i++)
+        {
+            if(temp < jobTime[i])
+                temp = jobTime[i];
+        }
+        // 更新最慢的时间
+        if(temp < Max)
+            Max = temp;
+        return;
+    }
+    else
+    {
+        // 搜索N叉树，原理就是放进去0~m个格子试试
+        for(int i=0; i< m; i++)
+        {
+            jobTime[i] += num[level];
+            // 剪枝--
+            if(jobTime[i] < Max)
+                backtrack(level + 1);
+            jobTime[i] -= num[level];
+        }
+    }
+}
+
+int main()
+{
+    int i;
+    cin >> n >> m;
+    for(int i=0; i< n; i++)
+        cin >> num[i];
+
+    cout << greedySelect(num,n,m) << endl;
+
+    for(int i=0;i< M;i++)
+        jobTime[i] = 0;
+    Max = -MAX_INT;
+    backtrack(0);
+    cout << Max << endl;
+    return 0;
+}
     </pre>
   </div>
 
