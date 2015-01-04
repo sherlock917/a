@@ -850,106 +850,62 @@ int main() {
   <div>
     <h3>8600 骑士问题</h3>
     <pre style="display: none;">
-#include &lt;iostream&gt;
-#include < stdio.h> 　　
-#include < stdlib.h>
+#include <iostream>
+#include <queue>
 using namespace std;
-
-#define MAXSTEP 64
-#define B 2
-#define N 1
-
-int countStep;
-
-int check (int x,int y,int chessboard[8][8]) {
-    if(x< 0||x>7||y< 0||y>7||chessboard[x][y]==B) {
-        return B;
-    } else {
-        return(chessboard[x][y]);
-    }
+inline bool available(int row, int col)
+{
+    return row>=0 && row< 8 && col>=0 && col< 8;
 }
-
-void moves (int x,int y,int chessboard[8][8],int count) {
-    int tChessboard[8][8],i,j;
-
-    for(i=0;i< 8;i++) for(j=0;j< 8;j++) {
-        tChessboard[i][j]=chessboard[i][j];
-    }
-
-    switch (check(x,y,tChessboard)) {
-        case B:return;
-        case N:if(count< countStep) countStep=count;return;
-        default:
-            if (count+1< countStep) {
-                tChessboard[x][y]=B;
-                moves(x+2,y+1,tChessboard,count+1);
-                moves(x+2,y-1,tChessboard,count+1);
-                moves(x-2,y+1,tChessboard,count+1);
-                moves(x-2,y-1,tChessboard,count+1);
-                moves(x+1,y+2,tChessboard,count+1);
-                moves(x+1,y-2,tChessboard,count+1);
-                moves(x-1,y+2,tChessboard,count+1);
-                moves(x-1,y-2,tChessboard,count+1);
-            }
-    }
-}
-
-int main() {
-
-    int startX,startY,chessboard[8][8],n,i,j;
-    char s[3];
-
-    typedef struct trst {
-        int result;
-        struct trst *next;
-    } rst;
-
-    rst *head,*p;
-    head=p=(rst*)malloc(sizeof(rst));
-    p->next=NULL;
-    while (1) {
-        cin >> n;
-        if (n==-1) {
-            break;
+int main()
+{
+    int T=1, n;
+    while(cin>>n)
+    {
+        if(n==-1) break;
+        cin.get();
+        int row;
+        char col;
+        int g[10][10] = {0};
+        if(n==0) cin.get();
+        for(int i=0; i< n; i++)
+        {
+            cin>>col>>row;
+            cin.get();
+            g[8-row][col-'a'] = -1;
         }
-
-        countStep=MAXSTEP;
-        for (i=0;i< 8;i++) {
-            for(j=0;j< 8;j++) {
-                chessboard[i][j]=0;
+        cin>>col>>row;
+        cin.get();
+        queue< pair< int,int> > q;
+        q.push(make_pair(8-row, col-'a'));
+        cin>>col>>row;
+        pair< int,int> dst(8-row, col-'a');
+        const int dictx[] = {-1,+1,-2,-2,-1,+1,+2,+2};
+        const int dicty[] = {-2,-2,-1,+1,+2,+2,-1,+1};
+        pair< int,int> cur;
+        while(!q.empty())
+        {
+            cur = q.front();
+            if(cur==dst) break;
+            q.pop();
+            int next_row, next_col;
+            for(int i=0; i< 8; i++)
+            {
+                next_row = cur.first + dictx[i];
+                next_col = cur.second + dicty[i];
+                if(available(next_row, next_col) && g[next_row][next_col] == 0)
+                {
+                    q.push(make_pair(next_row, next_col));
+                    g[next_row][next_col] = g[cur.first][cur.second] + 1;
+                }
             }
         }
-        if (n) {
-            for(i=0;i< n;i++) {
-                cin >> s;
-                chessboard[(s[0]-'a')][(s[1]-'1')]=B;
-            }
-        }
-        cin >> s;
-        startX=s[0]-'a';startY=s[1]-'1';
-        cin >> s;
-        chessboard[(s[0]-'a')][(s[1]-'1')]=N;
-
-        p->next=(rst*)malloc(sizeof(rst));
-        p=p->next;
-        p->next=NULL;
-
-        moves(startX,startY,chessboard,0);
-        p->result=countStep;
+        cout << "Board " << T++ << ":";
+        if(q.empty())
+            cout << "not reachable" << endl;
+        else
+            cout << g[cur.first][cur.second] << " moves" << endl;
     }
-
-    p=head->next;
-    i=1;
-    while (p) {
-        if (p->result==MAXSTEP) {
-            cout << "Board " << i << ":not reachable" << endl;
-        } else {
-            cout << "Board " << i << ":" << p->result << " moves" << endl;
-        }
-        p=p->next;
-        i++;
-    }
-
     return 0;
 }
     </pre>
