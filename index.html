@@ -19,7 +19,7 @@
 </head>
 <body style="background: white; font-family: Helvetica">
 
-  <h6>点击标题显示代码，双击代码框复制代码（仅支持IE）</h6>
+  <h6>点击标题显示代码，双击代码框复制代码（仅支持IE）<button id="boss">复制全部</button></h6>
 
   <div>
     <h3>8594 有重复元素的排列问题</h3>
@@ -1207,6 +1207,19 @@ int main () {
           }
         }
       })();
+    }
+
+    document.getElementById('boss').onclick = function () {
+        if (window.clipboardData) {
+            var result = '';
+            for (var i = 0; i < codes.length; i++) {
+                result += titles[j].innerHTML.replace(/&nbsp;/g, ' ') + '\n' + codes[j].innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/<\/string>/g, '') + '\n\n\n';
+            }
+            window.clipboardData.setData('text', result);
+            alert('所有代码已复制到剪贴板');
+        } else {
+            alert('用ie。。。');
+        }
     }
   })();
   </script>
