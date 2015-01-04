@@ -768,7 +768,7 @@ int main() {
 
 using namespace std;
 
-void insert(int x[], int N, int num) {
+void insertNum(int x[], int N, int num) {
     for (int i = 0; i < N; i++) {
         if (x[i] > num) {
             for (int j = N; j > i; j--) {
@@ -792,7 +792,7 @@ int min(int x[], int N, int K) {
             for (int j = 0; j <= N - i; j++) {
                 x[j] = x[j + i];
             }
-            insert(x, N - i, sum);
+            insertNum(x, N - i, sum);
             if (N != i) {
                 N++;
             }
@@ -818,23 +818,28 @@ int max(int x[], int N) {
 
 int main() {
     int x[10001];
-    
+
     int N;
     int K;
-    
+
     cin >> N;
     cin >> K;
-    
+
     for (int i = 0; i < N; i++) {
         cin >> x[i];
     }
-    
+
     sort(x, x + N);
-    
+
     int tmp = max(x, N);
-    
+
+    while (N % (K - 1) != 1) {
+        insertNum(x, N, 0);
+        N++;
+    }
+
     cout << min(x, N, K) << " " << tmp << endl;
-    
+
     return 0;
 }
     </pre>
