@@ -1244,7 +1244,7 @@ int main () {
         var j = i;
         codes[j].ondblclick = function (e) {
           if (window.clipboardData) {
-            window.clipboardData.setData('text', codes[j].innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/<\/string\/>/g, ''));
+            window.clipboardData.setData('text', codes[j].innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/<\/string>/g, ''));
             alert('"' + titles[j].innerHTML.replace(/&nbsp;/g, ' ') + '"的代码已复制到剪贴板');
           } else {
             alert('用ie。。。');
