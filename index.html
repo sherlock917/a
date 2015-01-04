@@ -5,9 +5,11 @@
   <title></title>
   <style>
   h3 {
+    display: none;
     cursor: pointer;
   }
   h6 {
+    display: none;
     color: red;
   }
   pre {
@@ -19,7 +21,9 @@
 </head>
 <body style="background: white; font-family: Helvetica">
 
-  <h6>点击标题显示代码，双击代码框复制代码（仅支持IE）<button id="boss">复制全部</button></h6>
+  <button id="boss">你懂的</button>
+
+  <h6>点击标题显示代码，双击代码框复制代码（仅支持IE）</h6>
 
   <div>
     <h3>8594 有重复元素的排列问题</h3>
@@ -1213,7 +1217,7 @@ int main () {
         if (window.clipboardData) {
             var result = '';
             for (var i = 0; i < codes.length; i++) {
-                result += titles[i].innerHTML.replace(/&nbsp;/g, ' ') + '\n\n' + codes[i].innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/<\/string>/g, '') + '\n\n\n\n\n===============\n\n\n\n\n';
+                result += '\/\/' + titles[i].innerHTML.replace(/&nbsp;/g, ' ') + '\n\n' + codes[i].innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/<\/string>/g, '') + '\n\n\n\n\n\/\/===============\n\n\n\n\n';
             }
             window.clipboardData.setData('text', result);
             alert('所有代码已复制到剪贴板');
