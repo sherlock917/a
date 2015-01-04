@@ -719,31 +719,37 @@ int main()
     <h3>8602 区间相交问题</h3>
     <pre style="display: none;">
 #include &lt;iostream&gt;
-#include &lt;algorithm&gt;
+#include &lt;stdlib.h&gt;
 
 using namespace std;
+
+typedef struct region {
+    int left;
+    int right;
+} region;
+
+int cmp(const void *a,const void *b) {
+    return ((region *)a)->right - ((region *)b)->right;
+}
 
 int main() {
     int n;
     cin >> n;
 
-    pair< int, int> points[n];
-    for (int i = 0; i < n; i++) {
-        cin >> points[i].first;
-        cin >> points[i].second;
-        if (points[i].first > points[i].second) {
-            swap(points[i].first, points[i].second);
-        }
+    region r[n];
+
+    for(int i = 0; i < n; i++) {
+        cin >> r[i].left >> r[i].right;
     }
 
-    sort(points, points + n);
+    qsort(r, n, sizeof(r[0]), cmp);
 
-    int edge = points[0].second;
     int preserved = 1;
+    int edge = r[0].right;
     for (int i = 1; i < n; i++) {
-        if (points[i].first >= edge) {
+        if (r[i].left >= edge) {
             preserved++;
-            edge = points[i].second;
+            edge = r[i].right;
         }
     }
 
@@ -1231,9 +1237,6 @@ int main () {
     for (var i = 0; i < codes.length; i++) {
       (function () {
         var j = i;
-        // codes[j].onclick = function (e) {
-        //   codes[j].style.display = 'none';
-        // }
         codes[j].ondblclick = function (e) {
           if (window.clipboardData) {
             window.clipboardData.setData('text', codes[j].innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>'));
