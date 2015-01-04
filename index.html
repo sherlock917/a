@@ -1213,7 +1213,7 @@ int main () {
         if (window.clipboardData) {
             var result = '';
             for (var i = 0; i < codes.length; i++) {
-                result += titles[i].innerHTML.replace(/&nbsp;/g, ' ') + '\n' + codes[i].innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/<\/string>/g, '') + '\n\n\n';
+                result += titles[i].innerHTML.replace(/&nbsp;/g, ' ') + '\n\n' + codes[i].innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/<\/string>/g, '') + '\n\n\n\n\n===============\n\n\n\n\n';
             }
             window.clipboardData.setData('text', result);
             alert('所有代码已复制到剪贴板');
